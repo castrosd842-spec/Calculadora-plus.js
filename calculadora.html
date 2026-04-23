@@ -4,98 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calculadora Plus</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap');
-    :root{--bg:#0a0a0f;--panel:#111118;--border:#1e1e2e;--accent:#00f5d4;--accent2:#f72585;--accent3:#7209b7;--text:#e0e0f0;--text-dim:#555570;--btn-bg:#16161f;--btn-hover:#1e1e2e;--btn-op:#1a1a28;--btn-op-hover:#232336;--display-bg:#0d0d14;--shadow:0 0 30px rgba(0,245,212,.08);--glow:0 0 15px rgba(0,245,212,.3)}
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{background:var(--bg);min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani','Segoe UI',sans-serif;overflow:hidden}
-    body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,245,212,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,212,.03) 1px,transparent 1px);background-size:40px 40px;animation:gridMove 20s linear infinite;pointer-events:none}
-    body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(114,9,183,.08) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(0,245,212,.05) 0%,transparent 50%);pointer-events:none}
-    @keyframes gridMove{0%{transform:translateY(0)}100%{transform:translateY(40px)}}
-    .wrapper{position:relative;z-index:1;display:flex;gap:20px;align-items:flex-start}
-    .calc{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:24px;width:320px;box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.05);position:relative;overflow:hidden}
-    .calc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
-    .calc-header{display:flex;align-items:center;gap:10px;margin-bottom:20px}
-    .dot{width:8px;height:8px;border-radius:50%}
-    .dot-r{background:var(--accent2);box-shadow:0 0 6px var(--accent2)}
-    .dot-y{background:#ffd166;box-shadow:0 0 6px #ffd166}
-    .dot-g{background:var(--accent);box-shadow:0 0 6px var(--accent)}
-    .calc-title{margin-left:auto;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim)}
-    .display-wrap{background:var(--display-bg);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px;min-height:90px;position:relative}
-    .display-expression{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text-dim);min-height:18px;text-align:right;margin-bottom:4px;letter-spacing:1px}
-    .display-main{font-family:'Share Tech Mono',monospace;font-size:32px;color:var(--text);text-align:right;word-break:break-all;line-height:1.2;transition:all .1s}
-    .display-main.result{color:var(--accent);text-shadow:var(--glow)}
-    .display-main.error{color:var(--accent2);font-size:20px}
-    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-    button{background:var(--btn-bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Rajdhani','Segoe UI',sans-serif;font-size:18px;font-weight:600;height:56px;cursor:pointer;transition:all .15s ease;position:relative;overflow:hidden;letter-spacing:.5px}
-    button::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.05),transparent);opacity:0;transition:opacity .15s}
-    button:hover::before{opacity:1}
-    button:hover{background:var(--btn-hover);border-color:rgba(0,245,212,.2);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.3)}
-    button:active{transform:translateY(1px) scale(.97);box-shadow:none}
-    .ripple{position:absolute;border-radius:50%;background:rgba(0,245,212,.2);transform:scale(0);animation:ripple .5s linear;pointer-events:none}
-    @keyframes ripple{to{transform:scale(4);opacity:0}}
-    .btn-op{background:var(--btn-op);color:var(--accent);border-color:rgba(0,245,212,.15)}
-    .btn-op:hover{background:var(--btn-op-hover);border-color:rgba(0,245,212,.4);box-shadow:0 4px 12px rgba(0,245,212,.1)}
-    .btn-clear{background:rgba(247,37,133,.1);color:var(--accent2);border-color:rgba(247,37,133,.2)}
-    .btn-clear:hover{background:rgba(247,37,133,.2);border-color:rgba(247,37,133,.5);box-shadow:0 4px 12px rgba(247,37,133,.15)}
-    .btn-equal{background:linear-gradient(135deg,#00b4d8,var(--accent));color:#0a0a0f;border:none;font-weight:700;box-shadow:0 4px 20px rgba(0,245,212,.25)}
-    .btn-equal:hover{box-shadow:0 6px 25px rgba(0,245,212,.4);transform:translateY(-2px)}
-    .btn-del{background:rgba(114,9,183,.15);color:#b48aff;border-color:rgba(114,9,183,.25)}
-    .btn-del:hover{background:rgba(114,9,183,.25);border-color:rgba(114,9,183,.5)}
-    .btn-extra{background:rgba(255,255,255,.03);color:#8888aa;border-color:rgba(255,255,255,.06);font-size:14px}
-    .btn-extra:hover{color:var(--text);border-color:rgba(255,255,255,.15)}
-    /* BOTÃO BÍBLIA */
-    .btn-biblia{width:100%;margin-top:14px;padding:0 16px;background:linear-gradient(135deg,#1a0a00,#2a1200,#1a0a00);border:1px solid rgba(255,200,80,.25);border-radius:12px;cursor:pointer;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;transition:all .3s ease;height:62px;text-align:left}
-    .btn-biblia::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,200,80,.06),rgba(255,150,30,.08),rgba(255,200,80,.06));opacity:0;transition:opacity .3s}
-    .btn-biblia::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,200,80,.6),transparent)}
-    .btn-biblia:hover{border-color:rgba(255,200,80,.55);transform:translateY(-2px);box-shadow:0 6px 30px rgba(255,150,30,.2)}
-    .btn-biblia:hover::before{opacity:1}
-    .btn-biblia:active{transform:translateY(0)}
-    .biblia-icon{font-size:24px;color:#ffc850;text-shadow:0 0 12px rgba(255,200,80,.6);animation:goldPulse 3s ease-in-out infinite;flex-shrink:0}
-    @keyframes goldPulse{0%,100%{text-shadow:0 0 10px rgba(255,200,80,.5)}50%{text-shadow:0 0 22px rgba(255,200,80,.9),0 0 40px rgba(255,150,30,.4)}}
-    .biblia-texts{display:flex;flex-direction:column;gap:3px}
-    .biblia-texto{font-family:'Rajdhani','Segoe UI',sans-serif;font-size:15px;font-weight:700;color:#ffc850;letter-spacing:1px}
-    .biblia-sub{font-family:'Rajdhani','Segoe UI',sans-serif;font-size:10px;color:rgba(255,200,80,.45);letter-spacing:1.5px;text-transform:uppercase}
-    /* HISTÓRICO */
-    .history-panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;width:220px;max-height:540px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow);position:relative}
-    .history-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent3),transparent)}
-    .history-header{padding:16px 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-    .history-header span{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim)}
-    .btn-clear-hist{background:none;border:none;color:var(--text-dim);font-size:11px;font-family:'Rajdhani','Segoe UI',sans-serif;cursor:pointer;height:auto;padding:4px 8px;border-radius:4px;transition:all .15s;letter-spacing:1px}
-    .btn-clear-hist:hover{color:var(--accent2);background:rgba(247,37,133,.1);transform:none;box-shadow:none}
-    .history-list{flex:1;overflow-y:auto;padding:8px}
-    .history-list::-webkit-scrollbar{width:3px}
-    .history-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-    .history-item{padding:10px 12px;border-radius:8px;cursor:pointer;transition:all .15s;border:1px solid transparent;margin-bottom:4px;animation:fadeIn .3s ease}
-    .history-item:hover{background:var(--btn-hover);border-color:var(--border)}
-    .history-item .expr{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text-dim);margin-bottom:2px}
-    .history-item .res{font-family:'Share Tech Mono',monospace;font-size:16px;font-weight:600;color:var(--accent)}
-    .history-empty{text-align:center;color:var(--text-dim);font-size:12px;padding:30px 0;letter-spacing:1px}
-    @keyframes fadeIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
-    .blink{animation:blink .2s ease}
-    /* MODAL */
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;pointer-events:none;transition:opacity .35s ease}
-    .modal-overlay.ativo{opacity:1;pointer-events:all}
-    .modal-box{background:linear-gradient(160deg,#120800,#1e0f00,#120800);border:1px solid rgba(255,200,80,.3);border-radius:20px;padding:40px 36px 32px;max-width:420px;width:90%;text-align:center;position:relative;box-shadow:0 0 60px rgba(255,150,30,.15),inset 0 1px 0 rgba(255,200,80,.1);transform:scale(.88) translateY(20px);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
-    .modal-overlay.ativo .modal-box{transform:scale(1) translateY(0)}
-    .modal-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,200,80,.7),transparent);border-radius:20px 20px 0 0}
-    .modal-cruz{font-size:40px;color:#ffc850;text-shadow:0 0 20px rgba(255,200,80,.7),0 0 50px rgba(255,150,30,.4);margin-bottom:20px;animation:goldPulse 3s ease-in-out infinite}
-    .modal-ref{font-family:'Share Tech Mono',monospace;font-size:12px;color:rgba(255,200,80,.6);letter-spacing:3px;text-transform:uppercase;margin-bottom:20px}
-    .modal-verso{font-family:'Rajdhani','Segoe UI',sans-serif;font-size:19px;font-weight:400;color:#f5e8cc;line-height:1.7;margin-bottom:32px;min-height:80px;padding:0 12px;position:relative}
-    .modal-verso::before{content:'\201C';font-size:60px;color:rgba(255,200,80,.12);font-family:Georgia,serif;position:absolute;top:-16px;left:-4px;line-height:1}
-    .modal-novo{width:100%;background:linear-gradient(135deg,#b8860b,#ffc850,#b8860b);border:none;border-radius:10px;color:#1a0800;font-family:'Rajdhani','Segoe UI',sans-serif;font-size:15px;font-weight:700;height:50px;cursor:pointer;letter-spacing:2px;text-transform:uppercase;transition:all .2s ease;margin-bottom:10px;box-shadow:0 4px 20px rgba(255,180,50,.3)}
-    .modal-novo:hover{box-shadow:0 6px 30px rgba(255,180,50,.5);transform:translateY(-2px);filter:brightness(1.1)}
-    .modal-novo:active{transform:translateY(0)}
-    .modal-fechar{width:100%;background:transparent;border:1px solid rgba(255,200,80,.15);border-radius:10px;color:rgba(255,200,80,.4);font-family:'Rajdhani','Segoe UI',sans-serif;font-size:13px;font-weight:600;height:42px;cursor:pointer;letter-spacing:2px;text-transform:uppercase;transition:all .2s ease}
-    .modal-fechar:hover{border-color:rgba(255,200,80,.35);color:rgba(255,200,80,.7);background:rgba(255,200,80,.04);transform:none;box-shadow:none}
-    @keyframes fadeSlide{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-    .animar{animation:fadeSlide .4s ease}
-    @media(max-width:600px){.wrapper{flex-direction:column;align-items:center}.history-panel{width:320px;max-height:200px}}
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <div class="wrapper">
+
+  <!-- CALCULADORA -->
   <div class="calc">
     <div class="calc-header">
       <div class="dot dot-r"></div>
@@ -103,164 +19,58 @@
       <div class="dot dot-g"></div>
       <span class="calc-title">Calc Plus</span>
     </div>
+
     <div class="display-wrap">
       <div class="display-expression" id="expression"></div>
       <div class="display-main" id="display">0</div>
     </div>
+
     <div class="grid">
+      <!-- Linha 1 -->
       <button class="btn-clear" onclick="limpar()">C</button>
-      <button class="btn-del"   onclick="apagar()">&#x232B;</button>
+      <button class="btn-del" onclick="apagar()">⌫</button>
       <button class="btn-extra" onclick="adicionar('%')">%</button>
-      <button class="btn-op"    onclick="adicionar('/')">&#247;</button>
+      <button class="btn-op" onclick="adicionar('/')">÷</button>
+
+      <!-- Linha 2 -->
       <button onclick="adicionar('7')">7</button>
       <button onclick="adicionar('8')">8</button>
       <button onclick="adicionar('9')">9</button>
-      <button class="btn-op" onclick="adicionar('*')">&#215;</button>
+      <button class="btn-op" onclick="adicionar('*')">×</button>
+
+      <!-- Linha 3 -->
       <button onclick="adicionar('4')">4</button>
       <button onclick="adicionar('5')">5</button>
       <button onclick="adicionar('6')">6</button>
-      <button class="btn-op" onclick="adicionar('-')">&#8722;</button>
+      <button class="btn-op" onclick="adicionar('-')">−</button>
+
+      <!-- Linha 4 -->
       <button onclick="adicionar('1')">1</button>
       <button onclick="adicionar('2')">2</button>
       <button onclick="adicionar('3')">3</button>
       <button class="btn-op" onclick="adicionar('+')">+</button>
-      <button class="btn-extra" onclick="negarNumero()">&#177;</button>
+
+      <!-- Linha 5 -->
+      <button class="btn-extra" onclick="negarNumero()">±</button>
       <button onclick="adicionar('0')">0</button>
       <button class="btn-extra" onclick="adicionar('.')">.</button>
       <button class="btn-equal" onclick="calcular()">=</button>
     </div>
-    <button class="btn-biblia" onclick="abrirVersiculo()">
-      <span class="biblia-icon">&#10013;</span>
-      <div class="biblia-texts">
-        <span class="biblia-texto">Palavra de Deus</span>
-        <span class="biblia-sub">Toque para uma mensagem</span>
-      </div>
-    </button>
   </div>
+
+  <!-- HISTÓRICO -->
   <div class="history-panel">
     <div class="history-header">
-      <span>Hist&#243;rico</span>
+      <span>Histórico</span>
       <button class="btn-clear-hist" onclick="limparHistorico()">Limpar</button>
     </div>
     <div class="history-list" id="historico">
-      <div class="history-empty">Nenhum c&#225;lculo ainda</div>
+      <div class="history-empty" id="empty-msg">Nenhum cálculo ainda</div>
     </div>
   </div>
+
 </div>
-<div class="modal-overlay" id="modalOverlay" onclick="fecharModal(event)">
-  <div class="modal-box">
-    <div class="modal-cruz">&#10013;</div>
-    <div class="modal-ref"   id="modalRef"></div>
-    <div class="modal-verso" id="modalVerso"></div>
-    <button class="modal-novo"   onclick="novoVersiculo()">&#10022; Nova mensagem</button>
-    <button class="modal-fechar" onclick="fecharModalDireto()">Fechar</button>
-  </div>
-</div>
-<script>
-const displayEl=document.getElementById('display'),expressionEl=document.getElementById('expression'),historicoEl=document.getElementById('historico');
-let expressao='',acabouCalculo=false,listaHistorico=[];
-function adicionar(v){if(acabouCalculo&&(!isNaN(v)||v==='.')){expressao='';acabouCalculo=false;}if(acabouCalculo&&['+','-','*','/','%'].includes(v))acabouCalculo=false;if(v==='.'){const p=expressao.split(/[\+\-\*\/]/);if(p[p.length-1].includes('.'))return;}expressao+=v;expressionEl.textContent='';atualizarDisplay(fmt(expressao));}
-function negarNumero(){if(!expressao||expressao==='0')return;const m=expressao.match(/([\+\-\*\/]?)(-?\d+\.?\d*)$/);if(m){const n=m[2],ng=n.startsWith('-')?n.slice(1):'-'+n;expressao=expressao.slice(0,expressao.length-n.length)+ng;atualizarDisplay(fmt(expressao));}}
-function apagar(){if(acabouCalculo){limpar();return;}expressao=expressao.slice(0,-1);atualizarDisplay(fmt(expressao));if(!expressao)expressionEl.textContent='';}
-function limpar(){expressao='';acabouCalculo=false;displayEl.textContent='0';displayEl.className='display-main';expressionEl.textContent='';}
-function calcular(){if(!expressao)return;const ed=fmt(expressao);let r;try{r=Function('"use strict";return('+expressao+')')();if(!isFinite(r))throw 0;r=+(parseFloat(r.toPrecision(12)));}catch(e){displayEl.textContent='Erro';displayEl.className='display-main error';expressao='';acabouCalculo=true;return;}addHist(ed,r);expressionEl.textContent=ed+' =';displayEl.textContent=r;displayEl.className='display-main result';expressao=String(r);acabouCalculo=true;}
-function fmt(e){return e.replace(/\*/g,'\u00d7').replace(/\//g,'\u00f7').replace(/-/g,'\u2212')||'0';}
-function atualizarDisplay(v){displayEl.textContent=v||'0';displayEl.className='display-main blink';setTimeout(()=>displayEl.classList.remove('blink'),200);}
-function addHist(e,r){listaHistorico.unshift({expr:e,res:r});if(listaHistorico.length>20)listaHistorico.pop();renderHist();}
-function renderHist(){if(!listaHistorico.length){historicoEl.innerHTML='<div class="history-empty">Nenhum c\u00e1lculo ainda</div>';return;}historicoEl.innerHTML=listaHistorico.map((h,i)=>`<div class="history-item" onclick="usarHist(${i})"><div class="expr">${h.expr}</div><div class="res">${h.res}</div></div>`).join('');}
-function usarHist(i){const h=listaHistorico[i];expressao=String(h.res);displayEl.textContent=h.res;displayEl.className='display-main';expressionEl.textContent=h.expr+' =';acabouCalculo=true;}
-function limparHistorico(){listaHistorico=[];renderHist();}
-document.querySelectorAll('button').forEach(b=>b.addEventListener('click',function(e){const r=document.createElement('span');r.className='ripple';const rc=this.getBoundingClientRect(),s=Math.max(rc.width,rc.height);r.style.width=r.style.height=s+'px';r.style.left=(e.clientX-rc.left-s/2)+'px';r.style.top=(e.clientY-rc.top-s/2)+'px';this.appendChild(r);setTimeout(()=>r.remove(),600);}));
-document.addEventListener('keydown',e=>{if(e.key>='0'&&e.key<='9')adicionar(e.key);else if(['+','-','*','/','%'].includes(e.key))adicionar(e.key);else if(e.key==='.')adicionar('.');else if(e.key==='Enter'||e.key==='=')calcular();else if(e.key==='Backspace')apagar();else if(e.key==='Escape')limpar();});
-const versiculos=[
-{ref:"João 3:16",verso:"Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo aquele que nele crê não pereça, mas tenha a vida eterna."},
-{ref:"Salmos 23:1",verso:"O Senhor é o meu pastor; nada me faltará."},
-{ref:"Filipenses 4:13",verso:"Tudo posso naquele que me fortalece."},
-{ref:"Jeremias 29:11",verso:"Porque eu bem sei os planos que tenho a vosso respeito, diz o Senhor; planos de paz e não de mal, para vos dar um futuro e uma esperança."},
-{ref:"Salmos 46:1",verso:"Deus é o nosso refúgio e fortaleza, socorro bem presente nas tribulações."},
-{ref:"Romanos 8:28",verso:"Sabemos que todas as coisas cooperam para o bem daqueles que amam a Deus, daqueles que são chamados segundo o seu propósito."},
-{ref:"Isaías 40:31",verso:"Os que esperam no Senhor renovam as suas forças, sobem com asas como águias, correm e não se cansam, caminham e não se fatigam."},
-{ref:"Salmos 91:1",verso:"Aquele que habita no esconderijo do Altíssimo, à sombra do Onipotente descansará."},
-{ref:"Provérbios 3:5-6",verso:"Confia no Senhor de todo o teu coração e não te estribes no teu próprio entendimento. Reconhece-o em todos os teus caminhos, e ele endireitará as tuas veredas."},
-{ref:"Mateus 6:33",verso:"Buscai, pois, em primeiro lugar, o seu reino e a sua justiça, e todas essas coisas vos serão acrescentadas."},
-{ref:"Salmos 37:4",verso:"Deleita-te também no Senhor, e ele te concederá o que deseja o teu coração."},
-{ref:"Josué 1:9",verso:"Não to mandei eu? Sê forte e corajoso; não temas, nem te espantes, porque o Senhor, teu Deus, é contigo por onde quer que andares."},
-{ref:"Romanos 8:38-39",verso:"Estou convicto de que nem a morte, nem a vida, nem os anjos, nem os principados, nem o presente, nem o porvir, nem a altura, nem a profundeza nos poderá separar do amor de Deus."},
-{ref:"Isaías 41:10",verso:"Não temas, porque eu sou contigo; não te assombres, porque eu sou o teu Deus; eu te fortaleço, e te ajudo, e te sustento com a minha destra fiel."},
-{ref:"Salmos 121:2",verso:"O meu socorro vem do Senhor, que fez o céu e a terra."},
-{ref:"Mateus 11:28",verso:"Vinde a mim, todos os que estais cansados e oprimidos, e eu vos aliviarei."},
-{ref:"Gálatas 5:22-23",verso:"O fruto do Espírito é: amor, gozo, paz, longanimidade, benignidade, bondade, fidelidade, mansidão, temperança."},
-{ref:"1 Coríntios 13:4-5",verso:"O amor é sofredor, é benigno; o amor não é invejoso; o amor não trata com leviandade, não se ensoberbece, não busca os seus interesses, não se irrita, não suspeita mal."},
-{ref:"Salmos 119:105",verso:"Lâmpada para os meus pés é a tua palavra, e luz para o meu caminho."},
-{ref:"João 14:6",verso:"Eu sou o caminho, e a verdade, e a vida. Ninguém vem ao Pai senão por mim."},
-{ref:"Efésios 2:8",verso:"Porque pela graça sois salvos, por meio da fé; e isso não vem de vós; é dom de Deus."},
-{ref:"2 Timóteo 1:7",verso:"Porque Deus não nos deu o espírito de temor, mas de poder, de amor e de moderação."},
-{ref:"Salmos 34:18",verso:"Perto está o Senhor dos que têm o coração quebrantado, e salva os de espírito contrito."},
-{ref:"Lamentações 3:22-23",verso:"As misericórdias do Senhor são a causa de não sermos consumidos, porque as suas misericórdias não têm fim. Renovam-se cada manhã; grande é a tua fidelidade."},
-{ref:"João 16:33",verso:"Disse-vos estas coisas para que em mim tenhais paz. No mundo tereis aflições, mas tende bom ânimo; eu venci o mundo."},
-{ref:"Salmos 27:1",verso:"O Senhor é a minha luz e a minha salvação; a quem temerei? O Senhor é a força da minha vida; de quem me recearei?"},
-{ref:"Romanos 5:8",verso:"Mas Deus prova o seu amor para conosco em que Cristo morreu por nós, sendo nós ainda pecadores."},
-{ref:"Salmos 139:14",verso:"Graças te dou, porque de um modo assombroso e maravilhoso me formaste; as tuas obras são admiráveis, e a minha alma o sabe muito bem."},
-{ref:"Isaías 43:2",verso:"Quando passares pelas águas, eu serei contigo; quando pelos rios, eles não te submergirão; quando andares pelo fogo, não te queimarás, nem a chama arderá em ti."},
-{ref:"Provérbios 16:3",verso:"Confia ao Senhor as tuas obras, e os teus pensamentos serão estabelecidos."},
-{ref:"Mateus 7:7",verso:"Pedi, e dar-se-vos-á; buscai e achareis; batei, e abrir-se-vos-á."},
-{ref:"Salmos 55:22",verso:"Lança sobre o Senhor o teu peso, e ele te susterá; jamais permitirá que o justo seja abalado."},
-{ref:"João 8:32",verso:"E conhecereis a verdade, e a verdade vos libertará."},
-{ref:"Efésios 3:20",verso:"Ora, àquele que é poderoso para fazer tudo muito mais abundantemente além daquilo que pedimos ou pensamos, segundo o poder que em nós opera."},
-{ref:"Salmos 16:8",verso:"Tenho posto o Senhor continuamente diante de mim; porque ele está à minha mão direita, não serei abalado."},
-{ref:"1 João 4:18",verso:"No amor não existe medo; antes o perfeito amor lança fora o medo."},
-{ref:"Romanos 12:12",verso:"Alegrai-vos na esperança, sede pacientes na tribulação, perseverai na oração."},
-{ref:"Salmos 100:5",verso:"Porque o Senhor é bom, e a sua benignidade dura para sempre; e a sua fidelidade, de geração em geração."},
-{ref:"Êxodo 14:14",verso:"O Senhor pelejará por vós, e vós vos calareis."},
-{ref:"Marcos 11:24",verso:"Por isso vos digo que tudo o que pedirdes, orando, crede que o recebereis, e tê-lo-eis."},
-{ref:"Salmos 31:24",verso:"Sede fortes, e ele corroborará o vosso coração, vós todos que esperais no Senhor."},
-{ref:"Hebreus 11:1",verso:"Ora, a fé é a certeza de coisas que se esperam, a convicção de fatos que não se veem."},
-{ref:"1 Pedro 5:7",verso:"Lançando sobre ele toda a vossa ansiedade, porque ele tem cuidado de vós."},
-{ref:"Salmos 73:26",verso:"A minha carne e o meu coração desfalecem; mas Deus é a força do meu coração e a minha porção para sempre."},
-{ref:"Isaías 26:3",verso:"Tu conservarás em perfeita paz aquele cujo propósito está firme em ti, porque ele confia em ti."},
-{ref:"Romanos 15:13",verso:"Ora, o Deus de esperança vos encha de todo o gozo e paz no crer, para que abundeis em esperança pelo poder do Espírito Santo."},
-{ref:"João 1:5",verso:"A luz resplandece nas trevas, e as trevas não a compreenderam."},
-{ref:"Colossenses 3:2",verso:"Pensai nas coisas que são de cima, e não nas que são da terra."},
-{ref:"Salmos 145:18",verso:"Perto está o Senhor de todos os que o invocam, de todos os que o invocam em verdade."},
-{ref:"Marcos 10:27",verso:"Para os homens é impossível, mas não para Deus; porque para Deus todas as coisas são possíveis."},
-{ref:"Zacarias 4:6",verso:"Não por força nem por poder, mas pelo meu Espírito, diz o Senhor dos Exércitos."},
-{ref:"Provérbios 18:10",verso:"O nome do Senhor é uma torre forte; o justo corre para ela e está em segurança."},
-{ref:"Salmos 29:11",verso:"O Senhor dará força ao seu povo; o Senhor abençoará o seu povo com paz."},
-{ref:"Isaías 40:29",verso:"Ele dá força ao cansado, e multiplica as forças ao que não tem nenhum vigor."},
-{ref:"João 15:13",verso:"Ninguém tem maior amor do que este: de dar alguém a sua vida pelos seus amigos."},
-{ref:"Mateus 19:26",verso:"Para os homens isso é impossível, mas para Deus tudo é possível."},
-{ref:"Apocalipse 21:4",verso:"E enxugará dos seus olhos toda lágrima; e não haverá mais morte, nem pranto, nem clamor, nem dor."},
-{ref:"Salmos 40:1-2",verso:"Esperando, esperei no Senhor, e ele se inclinou para mim e ouviu o meu clamor. E tirou-me dum poço de destruição, dum charco de lama, e fixou os meus pés sobre uma rocha."},
-{ref:"Lucas 1:37",verso:"Porque nenhuma palavra de Deus ficará sem efeito."},
-{ref:"Deuteronômio 31:6",verso:"Sede fortes e corajosos; não temais, nem vos aterrorizeis; porque o Senhor teu Deus é quem vai contigo; não te deixará, nem te abandonará."},
-{ref:"Salmos 84:11",verso:"O Senhor Deus é sol e escudo; o Senhor dará graça e glória; não retirará o bem aos que andam em integridade."},
-{ref:"Efésios 6:10",verso:"Quanto ao mais, fortalecei-vos no Senhor e na força do seu poder."},
-{ref:"Provérbios 31:25",verso:"Força e honra são o seu vestido, e se rirá do dia futuro."},
-{ref:"Salmos 103:2-3",verso:"Bendize, ó minha alma, ao Senhor, e não te esqueças de nenhum de seus benefícios. Ele é quem perdoa todas as tuas iniquidades, quem sara todas as tuas enfermidades."},
-{ref:"João 10:10",verso:"Eu vim para que tenham vida e a tenham em abundância."},
-{ref:"Isaías 53:5",verso:"Mas ele foi ferido por causa das nossas transgressões, e moído por causa das nossas iniquidades; o castigo que nos traz a paz estava sobre ele, e pelas suas pisaduras fomos sarados."},
-{ref:"Salmos 18:2",verso:"O Senhor é a minha rocha, e a minha fortaleza, e o meu libertador; o meu Deus, o meu rochedo, em quem me refugio; o meu escudo, e a força da minha salvação."},
-{ref:"Mateus 5:14",verso:"Vós sois a luz do mundo; não se pode esconder uma cidade edificada sobre um monte."},
-{ref:"1 Coríntios 10:13",verso:"Fiel é Deus, que não vos deixará ser tentados acima do que podeis suportar; antes, com a tentação, dará também o escape, para que a possais suportar."},
-{ref:"Tiago 1:5",verso:"Se algum de vós tem falta de sabedoria, peça-a a Deus, que a todos dá liberalmente, sem reprovar, e ser-lhe-á dada."},
-{ref:"Salmos 9:9",verso:"O Senhor também será um alto refúgio para o oprimido, um alto refúgio nos tempos de angústia."},
-{ref:"Hebreus 13:8",verso:"Jesus Cristo é o mesmo ontem, e hoje, e eternamente."},
-{ref:"Apocalipse 3:20",verso:"Eis que estou à porta e bato; se alguém ouvir a minha voz e abrir a porta, entrarei em sua casa e cearei com ele, e ele comigo."},
-{ref:"Salmos 32:8",verso:"Eu te instruirei e te ensinarei o caminho que deves seguir; sobre ti fixarei os meus olhos."},
-{ref:"Filipenses 4:6-7",verso:"Não vos inquieteis com coisa alguma; antes em tudo fazei os vossos pedidos chegar ao conhecimento de Deus pela oração e súplica com ação de graças. E a paz de Deus, que excede todo o entendimento, guardará os vossos corações."},
-{ref:"Mateus 28:20",verso:"E eis que estou convosco todos os dias, até a consumação dos séculos."},
-{ref:"Salmos 107:1",verso:"Louvai ao Senhor, porque ele é bom, porque a sua benignidade dura para sempre."},
-{ref:"1 Coríntios 2:9",verso:"O que o olho não viu, nem o ouvido ouviu, nem subiu ao coração do homem, são as coisas que Deus preparou para os que o amam."},
-{ref:"Salmos 23:4",verso:"Ainda que eu andasse pelo vale da sombra da morte, não temeria mal nenhum, porque tu és comigo; o teu bordão e o teu cajado me consolam."},
-{ref:"Mateus 5:3",verso:"Bem-aventurados os pobres de espírito, porque deles é o reino dos céus."},
-{ref:"Salmos 5:3",verso:"Senhor, pela manhã ouvirás a minha voz; pela manhã me apresentarei a ti e esperarei."}
-];
-let ultimoV=-1;
-function abrirVersiculo(){mostrarVersiculo();document.getElementById('modalOverlay').classList.add('ativo');}
-function mostrarVersiculo(){let i;do{i=Math.floor(Math.random()*versiculos.length);}while(i===ultimoV&&versiculos.length>1);ultimoV=i;const v=versiculos[i],r=document.getElementById('modalRef'),ve=document.getElementById('modalVerso');r.classList.remove('animar');ve.classList.remove('animar');void r.offsetWidth;r.textContent=v.ref;ve.textContent=v.verso;r.classList.add('animar');ve.classList.add('animar');}
-function novoVersiculo(){mostrarVersiculo();}
-function fecharModal(e){if(e.target===document.getElementById('modalOverlay'))fecharModalDireto();}
-function fecharModalDireto(){document.getElementById('modalOverlay').classList.remove('ativo');}
-</script>
+
+<script src="funcoes.js"></script>
 </body>
 </html>
