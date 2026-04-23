@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Plus</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- CALCULADORA -->
+  <div class="calc">
+    <div class="calc-header">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+      <span class="calc-title">Calc Plus</span>
+    </div>
+
+    <div class="display-wrap">
+      <div class="display-expression" id="expression"></div>
+      <div class="display-main" id="display">0</div>
+    </div>
+
+    <div class="grid">
+      <!-- Linha 1 -->
+      <button class="btn-clear" onclick="limpar()">C</button>
+      <button class="btn-del" onclick="apagar()">⌫</button>
+      <button class="btn-extra" onclick="adicionar('%')">%</button>
+      <button class="btn-op" onclick="adicionar('/')">÷</button>
+
+      <!-- Linha 2 -->
+      <button onclick="adicionar('7')">7</button>
+      <button onclick="adicionar('8')">8</button>
+      <button onclick="adicionar('9')">9</button>
+      <button class="btn-op" onclick="adicionar('*')">×</button>
+
+      <!-- Linha 3 -->
+      <button onclick="adicionar('4')">4</button>
+      <button onclick="adicionar('5')">5</button>
+      <button onclick="adicionar('6')">6</button>
+      <button class="btn-op" onclick="adicionar('-')">−</button>
+
+      <!-- Linha 4 -->
+      <button onclick="adicionar('1')">1</button>
+      <button onclick="adicionar('2')">2</button>
+      <button onclick="adicionar('3')">3</button>
+      <button class="btn-op" onclick="adicionar('+')">+</button>
+
+      <!-- Linha 5 -->
+      <button class="btn-extra" onclick="negarNumero()">±</button>
+      <button onclick="adicionar('0')">0</button>
+      <button class="btn-extra" onclick="adicionar('.')">.</button>
+      <button class="btn-equal" onclick="calcular()">=</button>
+    </div>
+  </div>
+
+  <!-- HISTÓRICO -->
+  <div class="history-panel">
+    <div class="history-header">
+      <span>Histórico</span>
+      <button class="btn-clear-hist" onclick="limparHistorico()">Limpar</button>
+    </div>
+    <div class="history-list" id="historico">
+      <div class="history-empty" id="empty-msg">Nenhum cálculo ainda</div>
+    </div>
+  </div>
+
+</div>
+
+<script src="funcoes.js"></script>
+</body>
+</html>
